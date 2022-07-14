@@ -1,4 +1,5 @@
 <?php
+ini_set("allow_url_fopen", 1);
 require 'vendor/autoload.php';
 
 use Dotenv\Dotenv;
@@ -7,8 +8,13 @@ $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 $apiKey= $_ENV['API_KEY'];
+$apiUrl = "http://www.litecoinpool.org/api?api_key=".$apiKey;
 
-$apiUrl = "https://www.litecoinpool.org/api?api_key=".$apiKey;
+$data = file_get_contents($apiUrl);
+$data = json_decode($data, true);
+echo $data['user']['hash_rate'];
+//print complete object, just echo the variable not work so you need to use print_r to show the result
+
 
 
 ?>
@@ -26,7 +32,10 @@ $apiUrl = "https://www.litecoinpool.org/api?api_key=".$apiKey;
     <title>Litcoing Mining Statistic</title>
   </head>
   <body>
-    <h1>Hello, world!</h1>
+
+    <div class="container">
+
+    </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
