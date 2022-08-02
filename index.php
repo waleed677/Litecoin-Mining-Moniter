@@ -12,10 +12,23 @@ $apiUrl = "http://www.litecoinpool.org/api?api_key=" . $apiKey;
 
 $data = file_get_contents($apiUrl);
 $data = json_decode($data, true);
-// echo $data['user']['hash_rate'];
-//print complete object, just echo the variable not work so you need to use print_r to show the result
 
 
+// KDA API CALL
+
+$kdaApiUrl = "https://api.f2pool.com/kadena/aceminers";
+$curl = curl_init($kdaApiUrl);
+curl_setopt($curl, CURLOPT_URL, $kdaApiUrl);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+
+$kdaData = curl_exec($curl);
+curl_close($curl);
+$kdaData = json_decode($kdaData, true);
 
 ?>
 
@@ -30,10 +43,10 @@ $data = json_decode($data, true);
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
-  <title>Litecoin Mining Statistic</title>
+  <title>AceMiners Mining Statistic</title>
   <style>
     body {
-      background-image: url(assets/images/bg1.png) !important;
+      background-image: url(assets/images/bg.png);
       background-repeat: no-repeat;
       background-size: cover;
       background-position: top;
@@ -64,7 +77,7 @@ $data = json_decode($data, true);
     </nav>
     <div class="space"></div>
     <div class="space"></div>    
-    <h2 class="text-center text-white">Account Info</h2>
+    <h2 class="text-center text-white">LTC Mining Stats</h2>
     <div class="space"></div>
     <div class="table-responsive">
       <table class="table">
@@ -90,7 +103,7 @@ $data = json_decode($data, true);
         </tbody>
       </table>
     </div>
-    <h2 class="text-center text-white">My Workers <?php echo $data['pool']['pps_ratio'] . "/" . $data['pool']['pps_ratio']; ?> </h2>
+    <h2 class="text-center text-white">LTC Workers <?php echo $data['pool']['pps_ratio'] . "/" . $data['pool']['pps_ratio']; ?> </h2>
     <div class="space"></div>
     <div id="accordion">
       <!-- Workers Start -->
@@ -146,6 +159,31 @@ $data = json_decode($data, true);
       <?php $index++;
       }  ?>
       <!-- Workers End -->
+    </div>
+    <div class="space"></div>
+    <h2 class="text-center text-white">KDA Mining Stats</h2>
+    <div class="space"></div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col" class="text-white">KDA Hashrate (24h)</th>
+            <th scope="col" class="text-white">Miner Online</th>
+            <th scope="col" class="text-white">Yesterday Revenue's</th>
+            <th scope="col" class="text-white">Total</th>
+            <th scope="col" class="text-white">Today's Est Revenue</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-white"><?php echo substr($kdaData['hashes_last_day'], 0, 5); ?> GH/s </td>
+            <td class="text-white"><?php echo  $kdaData['worker_length_online']; ?></td>
+            <td class="text-white"><?php echo  substr($kdaData['value_last_day'], 0, 7); ?></td>
+            <td class="text-white"><?php echo  substr($kdaData['value'], 0, 7); ?></td>
+            <td class="text-white"><?php echo  substr($kdaData['value_today'], 0, 7); ?></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="space"></div>
     <div class="text-center text-white">© 2022 Ace Miners NFT</div>
