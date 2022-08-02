@@ -31,62 +31,85 @@ $data = json_decode($data, true);
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
   <title>Litecoin Mining Statistic</title>
+  <style>
+    body {
+      background-image: url(assets/images/bg1.png) !important;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: top;
+    }
+    .navbar-brand {
+      margin: auto;
+    }
+    .space {
+      margin-top: 20px;
+    }
+    .btn-link {
+      font-size: 1.5rem;
+    }
+  </style>
 </head>
 
 <body>
-
+  <!-- Image and text -->
+  <div class="space"></div>
   <div class="container">
-    <h2 class="text-center">Account Info</h2>
+    <nav class="navbar navbar-light">
+      <a class="navbar-brand">
+        <img src="assets/images/logo.png" class="d-inline-block align-top text-center" alt="">
+      </a>
+    </nav>
+    <div class="space"></div>
+    <div class="space"></div>    
+    <h2 class="text-center text-white">Account Info</h2>
+    <div class="space"></div>
     <div class="table-responsive">
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Current Hashrate</th>
-            <th scope="col">Balance</th>
-            <th scope="col">24 Hours</th>
-            <th scope="col">Paid Rewards</th>
-            <th scope="col">Total Rewards</th>
-            <th scope="col">Total Work</th>
+            <th scope="col" class="text-white">Current Hashrate</th>
+            <th scope="col" class="text-white">Balance</th>
+            <th scope="col" class="text-white">24 Hours</th>
+            <th scope="col" class="text-white">Paid Rewards</th>
+            <th scope="col" class="text-white">Total Rewards</th>
+            <th scope="col" class="text-white">Total Work</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><?php echo substr($data['user']['hash_rate'], 0, 5); ?> MH/s </td>
-            <td><?php echo  substr($data['user']['unpaid_rewards'], 0, 7); ?></td>
-            <td><?php echo  substr($data['user']['past_24h_rewards'], 0, 7); ?>&nbsp;Ł</td>
-            <td><?php echo  substr($data['user']['paid_rewards'], 0, 7); ?>&nbsp;Ł</td>
-            <td><?php echo  substr($data['user']['total_rewards'], 0, 7); ?>&nbsp;Ł</td>
-            <td><?php echo  substr($data['user']['total_work'], 0, 5); ?>&nbsp;TH</td>
+            <td class="text-white"><?php echo substr($data['user']['hash_rate'], 0, 5); ?> MH/s </td>
+            <td class="text-white"><?php echo  substr($data['user']['unpaid_rewards'], 0, 7); ?></td>
+            <td class="text-white"><?php echo  substr($data['user']['past_24h_rewards'], 0, 7); ?>&nbsp;Ł</td>
+            <td class="text-white"><?php echo  substr($data['user']['paid_rewards'], 0, 7); ?>&nbsp;Ł</td>
+            <td class="text-white"><?php echo  substr($data['user']['total_rewards'], 0, 7); ?>&nbsp;Ł</td>
+            <td class="text-white"><?php echo  substr($data['user']['total_work'], 0, 5); ?>&nbsp;TH</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <h2 class="text-center">My Workers <?php echo $data['pool']['pps_ratio'] . "/" . $data['pool']['pps_ratio']; ?> </h2>
+    <h2 class="text-center text-white">My Workers <?php echo $data['pool']['pps_ratio'] . "/" . $data['pool']['pps_ratio']; ?> </h2>
+    <div class="space"></div>
     <div id="accordion">
       <!-- Workers Start -->
-    
-      <?php 
-       $index = 1;
-      foreach($data['workers'] as $key => $worker) { ?>
-      <div class="card">
-        <div class="card-header" id="headingOne">
-          <h5 class="mb-0">
-            <button class="btn btn-link" 
-            data-toggle="collapse" 
-            data-target="#<?php echo substr($key,0,-2).$index; ?>" 
-            aria-expanded="<?php echo $index == 1 ?  "true" :  "false"; ?>" 
-            aria-controls="<?php echo $key; ?>">
-            <?php 
-              echo $key;  
-              echo $worker['connected'] ? "&nbsp;&nbsp;&nbsp;<span class='badge badge-success'>online</span>" : "&nbsp;&nbsp;&nbsp;<span class='badge badge-danger'>offline</span>" ;
-              ?> 
-            </button>
-          </h5>
-        </div>
 
-        <div id="<?php echo substr($key,0,-2).$index  ; ?>" class="collapse <?php echo $index == 1 ?  "show" :  ""; ?> " data-parent="#accordion">
-          <div class="card-body">
-            <table class="table table-hover table-borderless">
+      <?php
+      $index = 1;
+      foreach ($data['workers'] as $key => $worker) { ?>
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+              <button class="btn btn-link" data-toggle="collapse" data-target="#<?php echo substr($key, 0, -2) . $index; ?>" aria-expanded="<?php echo $index == 1 ?  "true" :  "false"; ?>" aria-controls="<?php echo $key; ?>">
+                <?php
+                echo $key;
+                echo $worker['connected'] ? "&nbsp;&nbsp;&nbsp;<span class='badge badge-success'>online</span>" : "&nbsp;&nbsp;&nbsp;<span class='badge badge-danger'>offline</span>";
+                ?>
+              </button>
+            </h5>
+          </div>
+
+          <div id="<?php echo substr($key, 0, -2) . $index; ?>" class="collapse <?php echo $index == 1 ?  "show" :  ""; ?> " data-parent="#accordion">
+            <div class="card-body">
+              <table class="table table-hover table-borderless">
                 <tr>
                   <td>Hashrate (24h)</td>
                   <td><?php echo substr($worker['hash_rate_24h'], 0, 5); ?> MH/s</td>
@@ -101,23 +124,28 @@ $data = json_decode($data, true);
                 </tr>
                 <tr>
                   <td>Valid Shares</td>
-                  <td><?php echo substr($worker['valid_shares'], 0, 7); echo "&nbsp;(" . bcsub("100",$worker['invalid_shares']) ."%)"  ?> </td>
+                  <td><?php echo substr($worker['valid_shares'], 0, 7);
+                      echo "&nbsp;(" . bcsub("100", $worker['invalid_shares']) . "%)"  ?> </td>
                 </tr>
                 <tr>
                   <td>Invalid Shares</td>
-                  <td><?php echo $worker['invalid_shares']; echo "&nbsp;(" . $worker['invalid_shares'] ."%)"  ?> </td>
+                  <td><?php echo $worker['invalid_shares'];
+                      echo "&nbsp;(" . $worker['invalid_shares'] . "%)"  ?> </td>
                 </tr>
                 <tr>
                   <td>Stale Shares</td>
                   <td><?php echo substr($worker['stale_shares'], 0, 7); ?> </td>
                 </tr>
-            </table>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-      <?php $index++;}  ?>
-       <!-- Workers End -->
+      <?php $index++;
+      }  ?>
+      <!-- Workers End -->
     </div>
+    <div class="space"></div>
+    <div class="text-center text-white">© 2022 Ace Miners NFT</div>
   </div>
 
   <!-- Optional JavaScript; choose one of the two! -->
