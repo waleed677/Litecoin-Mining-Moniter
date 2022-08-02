@@ -47,6 +47,9 @@ $data = json_decode($data, true);
     .btn-link {
       font-size: 1.5rem;
     }
+    .badge {
+      font-size: 60%;
+    }
   </style>
 </head>
 
